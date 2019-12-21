@@ -1,10 +1,15 @@
+/* 
+* Henry Spencer's old regular expression library, also known as the book regex
+* library, circa 1986. https://garyhouston.github.io/regex/
+*/
+
 /*
  * regcomp and regexec -- regsub and regerror are elsewhere
  */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <regexp.h>
+#include "regexp.h"
 #include "regmagic.h"
 
 /*
@@ -135,10 +140,10 @@ static char *reg(struct comp *cp, int paren, int *flagp);
 static char *regbranch(struct comp *cp, int *flagp);
 static char *regpiece(struct comp *cp, int *flagp);
 static char *regatom(struct comp *cp, int *flagp);
-static char *regnode(struct comp *cp, int op);
+static char *regnode(struct comp *cp, char op);
 static char *regnext(char *node);
-static void regc(struct comp *cp, int c);
-static void reginsert(struct comp *cp, int op, char *opnd);
+static void regc(struct comp *cp, char b);
+static void reginsert(struct comp *cp, char op, char *opnd);
 static void regtail(struct comp *cp, char *p, char *val);
 static void regoptail(struct comp *cp, char *p, char *val);
 
@@ -157,9 +162,7 @@ static void regoptail(struct comp *cp, char *p, char *val);
  * Beware that the optimization-preparation code in here knows about some
  * of the structure of the compiled regexp.
  */
-regexp *
-regcomp(exp)
-const char *exp;
+regexp *regcomp(const char *exp)
 {
 	register regexp *r;
 	register char *scan;
@@ -246,11 +249,7 @@ const char *exp;
  * is a trifle forced, but the need to tie the tails of the branches to what
  * follows makes it hard to avoid.
  */
-static char *
-reg(cp, paren, flagp)
-register struct comp *cp;
-int paren;			/* Parenthesized? */
-int *flagp;
+static char *reg(register struct comp *cp, int paren, int *flagp)
 {
 	register char *ret;
 	register char *br;
@@ -316,10 +315,7 @@ int *flagp;
  *
  * Implements the concatenation operator.
  */
-static char *
-regbranch(cp, flagp)
-register struct comp *cp;
-int *flagp;
+static char *regbranch(register struct comp *cp, int *flagp)
 {
 	register char *ret;
 	register char *chain;
@@ -357,10 +353,7 @@ int *flagp;
  * It might seem that this node could be dispensed with entirely, but the
  * endmarker role is not redundant.
  */
-static char *
-regpiece(cp, flagp)
-register struct comp *cp;
-int *flagp;
+static char *regpiece(register struct comp *cp, int *flagp)
 {
 	register char *ret;
 	register char op;
@@ -426,10 +419,7 @@ int *flagp;
  * faster to run.  Backslashed characters are exceptions, each becoming a
  * separate node; the code is simpler that way and it's not worth fixing.
  */
-static char *
-regatom(cp, flagp)
-register struct comp *cp;
-int *flagp;
+static char *regatom(register struct comp *cp, int *flagp)
 {
 	register char *ret;
 	int flags;
@@ -535,10 +525,7 @@ int *flagp;
 /*
  - regnode - emit a node
  */
-static char *			/* Location. */
-regnode(cp, op)
-register struct comp *cp;
-char op;
+static char *regnode(register struct comp *cp, char op)			/* Location. */
 {
 	register char *const ret = cp->regcode;
 	register char *ptr;
@@ -560,10 +547,7 @@ char op;
 /*
  - regc - emit (if appropriate) a byte of code
  */
-static void
-regc(cp, b)
-register struct comp *cp;
-char b;
+static void regc(register struct comp *cp, char b)
 {
 	if (EMITTING(cp))
 		*cp->regcode++ = b;
@@ -576,11 +560,7 @@ char b;
  *
  * Means relocating the operand.
  */
-static void
-reginsert(cp, op, opnd)
-register struct comp *cp;
-char op;
-char *opnd;
+static void reginsert(register struct comp *cp, char op, char *opnd)
 {
 	register char *place;
 
@@ -601,11 +581,7 @@ char *opnd;
 /*
  - regtail - set the next-pointer at the end of a node chain
  */
-static void
-regtail(cp, p, val)
-register struct comp *cp;
-char *p;
-char *val;
+static void regtail(register struct comp *cp, char *p, char *val)
 {
 	register char *scan;
 	register char *temp;
@@ -626,11 +602,7 @@ char *val;
 /*
  - regoptail - regtail on operand of first argument; nop if operandless
  */
-static void
-regoptail(cp, p, val)
-register struct comp *cp;
-char *p;
-char *val;
+static void regoptail(register struct comp *cp, char *p, char *val)
 {
 	/* "Operandless" and "op != BRANCH" are synonymous in practice. */
 	if (!EMITTING(cp) || OP(p) != BRANCH)
@@ -668,10 +640,7 @@ static char *regprop();
 /*
  - regexec - match a regexp against a string
  */
-int
-regexec(prog, str)
-register regexp *prog;
-const char *str;
+int regexec(register regexp *prog, const char *str)
 {
 	register char *string = (char *)str;	/* avert const poisoning */
 	register char *s;
@@ -722,11 +691,7 @@ const char *str;
 /*
  - regtry - try match at specific point
  */
-static int			/* 0 failure, 1 success */
-regtry(ep, prog, string)
-register struct exec *ep;
-regexp *prog;
-char *string;
+static int regtry(register struct exec *ep, regexp *prog, char *string)			/* 0 failure, 1 success */
 {
 	register int i;
 	register char **stp;
@@ -758,10 +723,7 @@ char *string;
  * need to know whether the rest of the match failed) by a loop instead of
  * by recursion.
  */
-static int			/* 0 failure, 1 success */
-regmatch(ep, prog)
-register struct exec *ep;
-char *prog;
+static int regmatch(register struct exec *ep, char *prog)			/* 0 failure, 1 success */
 {
 	register char *scan;	/* Current node. */
 	char *next;		/* Next node. */
@@ -913,10 +875,7 @@ char *prog;
 /*
  - regrepeat - report how many times something simple would match
  */
-static size_t
-regrepeat(ep, node)
-register struct exec *ep;
-char *node;
+static size_t regrepeat(register struct exec *ep, char *node)
 {
 	register size_t count;
 	register char *scan;
@@ -950,9 +909,7 @@ char *node;
 /*
  - regnext - dig the "next" pointer out of a node
  */
-static char *
-regnext(p)
-register char *p;
+static char *regnext(register char *p)
 {
 	register const int offset = NEXT(p);
 
@@ -969,9 +926,7 @@ static char *regprop();
 /*
  - regdump - dump a regexp onto stdout in vaguely comprehensible form
  */
-void
-regdump(r)
-regexp *r;
+void regdump(regexp *r)
 {
 	register char *s;
 	register char op = EXACTLY;	/* Arbitrary non-END op. */
@@ -1012,9 +967,7 @@ regexp *r;
 /*
  - regprop - printable representation of opcode
  */
-static char *
-regprop(op)
-char *op;
+static char *regprop(char *op)
 {
 	register char *p;
 	static char buf[50];

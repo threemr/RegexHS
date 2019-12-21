@@ -5,17 +5,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <regexp.h>
+#include "regexp.h"
 #include "regmagic.h"
 
 /*
  - regsub - perform substitutions after a regexp match
  */
-void
-regsub(rp, source, dest)
-const regexp *rp;
-const char *source;
-char *dest;
+void regsub(const regexp *rp, const char *source, char *dest)
 {
 	register regexp * const prog = (regexp *)rp;
 	register char *src = (char *)source;

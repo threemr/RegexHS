@@ -4,9 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void
-regerror(s)
-char *s;
+void regerror(char *s)
 {
 #ifdef ERRAVAIL
 	error("regexp: %s", s);
