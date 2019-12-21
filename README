@@ -1,3 +1,18 @@
+<<WORK IN PROGRESS>>
+
+*** NOTES FOR THIS VERSION ***
+
+This is a wrapper and reorganization of the original library by H.S., to
+make it suitable for use with the Arduino IDE. The logic has not been changed
+on this version, only the distribution of source code in a more straightforward
+set of files, as well as (potentially) some wrappers.
+
+The "core" files from the original library -regexp.h, regexp.c, regsub.c, 
+regerror.c, and regmagic.h- were consolidated in RegexHS.h and RegexHS.c
+
+
+*** ORIGINAL README ***
+
 This is a revision of my well-known regular-expression package, regexp(3).
 It gives C programs the ability to use egrep-style regular expressions, and
 does it in a much cleaner fashion than the analogous routines in SysV.
