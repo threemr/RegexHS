@@ -2,13 +2,12 @@
 
 *** NOTES FOR THIS VERSION ***
 
-This is a wrapper and reorganization of the original library by H.S., to
+This is a wrapper and reorganization of the original library by Henry Spencer, to
 make it suitable for use with the Arduino IDE. The logic has not been changed
 on this version, only the distribution of source code in a more straightforward
-set of files, as well as (potentially) some wrappers.
-
-The "core" files from the original library -regexp.h, regexp.c, regsub.c, 
-regerror.c, and regmagic.h- were consolidated in RegexHS.h and RegexHS.c
+set of files, as well as (potentially) some wrappers. Specifically, the "core" files
+from the original library -regexp.h, regexp.c, regsub.c, regerror.c, and regmagic.h-
+were consolidated into RegexHS.h and RegexHS.c
 
 
 *** ORIGINAL README ***
