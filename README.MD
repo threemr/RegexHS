@@ -1,6 +1,6 @@
-#<<WORK IN PROGRESS>>
+# **WORK IN PROGRESS**
 
-##NOTES FOR THIS VERSION
+## NOTES FOR THIS VERSION
 
 This is a wrapper and reorganization of the original library by Henry Spencer, to
 make it suitable for use with the Arduino IDE. The logic has not been changed
@@ -22,8 +22,8 @@ help implementing the library for those already familiar with
 Another project worth checking for a small library oriented to fit into embedded
 applications is: [kokke´s tiny-regex-c library](https://github.com/kokke/tiny-regex-c)
 
-
-##ORIGINAL README
+---
+## ORIGINAL README
 
 >This is a revision of my well-known regular-expression package, regexp(3).
 >It gives C programs the ability to use egrep-style regular expressions, and
